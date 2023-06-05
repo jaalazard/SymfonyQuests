@@ -35,13 +35,14 @@ class EpisodeController extends AbstractController
             $slug = $slugger->slug($episode->getTitle());
             $episode->setSlug($slug);
             $episodeRepository->save($episode, true);
-            $mailer = (new Email())
+            $email = (new Email())
             ->from($this->getParameter('mailer_from'))
             ->to('your_email@example.com')
             ->subject('Un nouvel épisode a été publié !')
-            ->html($this->renderView('Episode/newEpisodeEmail.html.twig', ['episode' => $episode]));
+            ->html($this->renderView('episode/newEpisodeEmail.html.twig', ['episode' => $episode]));
+            $mailer->send($email);
             $this->addFlash('success', 'The new episode has been created');
-            $this->addFlash('danger', 'The new episode has been deleted');
+            // $this->addFlash('danger', 'The new episode has been deleted');
             return $this->redirectToRoute('app_episode_index', [], Response::HTTP_SEE_OTHER);
         }
 
