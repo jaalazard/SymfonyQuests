@@ -9,9 +9,12 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use DateTimeInterface;
 
 #[ORM\Entity(repositoryClass: ProgramRepository::class)]
 #[UniqueEntity('title', message: 'Ce titre existe déjà')]
+#[Vich\Uploadable] 
 class Program
 {
     #[ORM\Id]
@@ -28,8 +31,8 @@ class Program
     #[Assert\NotBlank(message: 'Ne me laisse pas tout vide')]
     private ?string $synopsis = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $poster = null;
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $poster;
 
     #[ORM\ManyToOne(inversedBy: 'programs')]
     private ?Category $category = null;
@@ -48,6 +51,12 @@ class Program
 
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
+
+    #[Vich\UploadableField(mapping: 'poster_file', fileNameProperty: 'poster')]
+     private ?File $posterFile = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+private ?DatetimeInterface $updatedAt = null;
 
     public function __construct()
     {
@@ -192,4 +201,22 @@ class Program
 
         return $this;
     }
+
+    
+  public function setPosterFile(File $image = null): Program
+  {
+    $this->posterFile = $image;
+    if ($image) {
+      $this->updatedAt = new DateTime('now');
+    }
+
+    return $this;
+  }
+
+
+    public function getPosterFile(): ?File
+    {
+        return $this->posterFile;
+    }
+
 }
