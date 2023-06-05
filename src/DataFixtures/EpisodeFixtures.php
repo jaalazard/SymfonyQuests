@@ -31,6 +31,8 @@ class EpisodeFixtures extends Fixture implements DependentFixtureInterface
             $episode->setSeason($this->getReference('season_' . $faker->numberBetween(0, 10)));
             $episode->setDuration($faker->numberBetween(20, 120));
             $this->addReference('episode_' . $i, $episode);
+            $slug = $this->slugger->slug($episode->getTitle());
+            $episode->setSlug($slug);
             $manager->persist($episode);
         }
         $manager->flush();
