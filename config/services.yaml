@@ -6,6 +6,7 @@
 parameters:
     mailer_from: '%env(resolve:MAILER_FROM)%'
     upload_directory: '%kernel.project_dir%/public/uploads/images/posters/'
+    upload_directory_actor: '%kernel.project_dir%/public/uploads/images/actor/'
 
 services:
     # default configuration for services in *this* file

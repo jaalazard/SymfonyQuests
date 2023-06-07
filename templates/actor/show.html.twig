@@ -7,7 +7,8 @@
     <h2>Programmes associés à cet acteur :</h2>
     <ul>
      {% for program in actor.programs %}
-        <li><a href="{{ path('program_show', { 'id': program.id }) }}">{{ program.title }}</a></li>
+        <li><a href="{{ path('program_show', { 'slug': program.slug }) }}">{{ program.title }}</a></li>
+        <img src="{{ vich_uploader_asset(actor)}}" alt="{{ actor.name }}">
     {% endfor %}
     </ul>
 {% endblock %}
