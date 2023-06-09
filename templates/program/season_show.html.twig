@@ -11,7 +11,7 @@
             <h5 class="mt-0">Liste des épisodes : </h5>
             <ul>
             {% for episode in season.episodes %}
-            <li> {{ episode.title }} <a href="{{ path("program_episode_show", { 'program':program.id, 'season':season.id, 'episode': episode.id }) }}">La fiche de l'épisode</a> </li>
+            <li> {{ episode.title }} <a href="{{ path("program_episode_show", { 'slug':program.slug, 'season':season.id, 'episode': episode.id }) }}">La fiche de l'épisode</a> </li>
             {% endfor %}
             </ul>
 			</div>

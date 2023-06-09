@@ -2,9 +2,12 @@
 
 namespace App\Entity;
 
+use App\Entity\Season;
 use App\Repository\EpisodeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: EpisodeRepository::class)]
 class Episode
@@ -32,6 +35,9 @@ class Episode
 
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
+
+    #[ORM\OneToMany(mappedBy: 'episode', targetEntity: Comment::class, orphanRemoval: true)]
+    private Collection $comments;
 
     public function getId(): ?int
     {
@@ -109,4 +115,10 @@ class Episode
 
         return $this;
     }
+
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+    
 }

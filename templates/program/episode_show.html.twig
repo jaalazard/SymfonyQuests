@@ -9,6 +9,18 @@
             <h3 class="mt-0">Episode n° {{episode.number }} : {{ episode.title }}</h3>
             <h4 class="mt-0">Résumé : {{ episode.synopsis }}</h4>
 			</div>
+
+            {% if app.user %}
+            <a href="{{path('comment_new')}}">Ajouter un commentaire</a>
+        {% endif %}
+        <br>
+        {% for comments in episode.comments %}
+        <h6>{{ comments.user.email }}</h6>
+            <li>{{ comments.rate ~ ' ' ~ comments.comment}}</li>
+        {% else %}
+            Aucun commentaire trouvé.
+        {% endfor %}
+    </div>
     <a href="{{ path('category_index') }}">
         Retour à la liste des catégories
     </a>
