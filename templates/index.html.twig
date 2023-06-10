@@ -3,7 +3,20 @@
 {% block title %}Wild Series{% endblock %}
 
 {% block body %}
-<div class="bg-warning">
+<div class="bg-warning container-fluid w-100">
 <h1 class="text-center">Bienvenue sur la page d'accueil du site</h1>
+
 </div>
+
+<section class="row">
+		{% for programs in program %}
+			<div class="card bg-danger" style="width: 18rem;">
+				<div class="card-body">
+					<h5 class="card-title">{{ programs.title }}</h5>
+					<p class="card-text">{{ programs.synopsis }}</p>
+					<a class="btn" href="{{ path("program_show", { slug: programs.slug }) }}">Voir</a>
+				</div>
+			</div>
+		{% endfor %}
+	</section>
 {% endblock %}
