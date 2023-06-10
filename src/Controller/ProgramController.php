@@ -2,21 +2,23 @@
 
 namespace App\Controller;
 
+use App\Entity\Season;
 use App\Entity\Episode;
 use App\Entity\Program;
-use App\Entity\Season;
-use App\Repository\ProgramRepository;
-use App\Repository\SeasonRepository;
-use App\Repository\EpisodeRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use App\Form\ProgramType;
-use Symfony\Component\String\Slugger\SluggerInterface;
 use App\Service\ProgramDuration;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use App\Repository\SeasonRepository;
+use App\Repository\ProgramRepository;
+use App\Repository\EpisodeRepository;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 #[Route('/program', name: 'program_')]
 class ProgramController extends AbstractController
@@ -40,16 +42,17 @@ class ProgramController extends AbstractController
             $slug = $slugger->slug($program->getTitle());
             $program->setSlug($slug);
             $programRepository->save($program, true);
+            $program->setOwner($this->getUser());
             $email = (new Email())
-            ->from($this->getParameter('mailer_from'))
-            ->to('your_email@example.com')
-            ->subject('Une nouvelle série vient d\'être publiée!')
-            ->html($this->renderView('Program/newProgramEmail.html.twig', ['program' => $program]));
+                ->from($this->getParameter('mailer_from'))
+                ->to('your_email@example.com')
+                ->subject('Une nouvelle série vient d\'être publiée!')
+                ->html($this->renderView('Program/newProgramEmail.html.twig', ['program' => $program]));
             $this->addFlash('success', 'The new program has been created');
             $this->addFlash('danger', 'The new program has been deleted');
-            
+
             return $this->redirectToRoute('program_index');
-    }
+        }
         return $this->render('program/new.html.twig', [
             'form' => $form,
         ]);
@@ -71,7 +74,35 @@ class ProgramController extends AbstractController
     }
 
     #[Route('/{slug}/season/{season}/episode/{episode}', requirements: ['season' => '\d+'], methods: ['GET'], name: 'episode_show')]
-    public function showEpisode(Program $program, Season $season, Episode $episode): Response{
-        return $this->render('program/episode_show.html.twig',['program' => $program, 'season' => $season , 'episode' => $episode]);
+    public function showEpisode(Program $program, Season $season, Episode $episode): Response
+    {
+        return $this->render('program/episode_show.html.twig', ['program' => $program, 'season' => $season, 'episode' => $episode]);
+    }
+
+    #[Route('/{slug}/edit', name: 'edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function edit(Request $request, Program $program, ProgramRepository $programRepository, SluggerInterface $slugger): Response
+    {
+        $form = $this->createForm(ProgramType::class, $program);
+        $form->handleRequest($request);
+
+        if ($this->getUser() !== $program->getOwner()) {
+            throw $this->createAccessDeniedException('Only the owner can edit the program!');
+        }
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $slug = $slugger->slug($program->getTitle());
+            $program->setSlug($slug);
+
+            $programRepository->save($program, true);
+            $this->addFlash('success', 'The new program has been update');
+            return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('program/edit.html.twig', [
+            'season' => $program,
+            'form' => $form,
+        ]);
     }
 }

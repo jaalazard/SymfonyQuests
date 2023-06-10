@@ -36,7 +36,8 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
                 ->setCountry($programName['country'])
                 ->setYear($programName['year'])
                 ->setCategory($this->getReference('category_' . $programName['category']))
-                ->setPoster('x');
+                ->setPoster('x')
+                ->setOwner($this->getReference('user_' . rand(1,2)));
              $this->addReference('program_' . $i, $program);
              $slug = $this->slugger->slug($program->getTitle());
              $program->setSlug($slug);

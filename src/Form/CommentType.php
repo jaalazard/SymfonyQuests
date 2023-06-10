@@ -19,11 +19,11 @@ class CommentType extends AbstractType
             ->add('author', null, ['choice_label' => 'email'])
             ->add('episode', null, [
                 'by_reference' => false,
-                'class' => Episode::class,
-                'query_builder' => function (EpisodeRepository $e) {
-                    return $e->createQueryBuilder('e')
-                        ->orderBy('e.title', 'ASC');
-                },
+                // 'class' => Episode::class,
+                // 'query_builder' => function (EpisodeRepository $e) {
+                //     return $e->createQueryBuilder('e')
+                //         ->orderBy('e.title', 'ASC');
+                // },
                 'choice_label' => 'title',
             ]);
     }

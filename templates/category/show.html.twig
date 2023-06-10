@@ -1,25 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Catégories{% endblock %}
+{% block title %}Catégories
+{% endblock %}
 
 {% block body %}
-    <div class="media">
-        {% for category in categories %}
-            <h1 class="mt-0">{{ category.name }}</h1>
-            {% for program in programs %}
-              {% if loop.index <= 3 %}
+	<div class="media">
+		{% for category in categories %}
+			<h1 class="mt-0">{{ category.name }}</h1>
+			{% for program in programs %}
+				{% if loop.index <= 3 %}
 					<article>
-                        <h2>{{ program.id }} : {{ program.title }}</h2>
+						<h2>{{ program.id }}
+							:
+							{{ program.title }}</h2>
 						<p>{{ program.synopsis }}</p>
-						<a href="{{ path("program_show", { 'slug': program.slug }) }}">en voir plus</a>
-					</article>
-                    {% endif %}
+						{% if is_granted("ROLE_ADMIN") %}
+							<a href="{{ path('program_edit', { 'slug': program.slug} ) }}">Éditer</a>
+							{% endif %}
+							<a href="{{ path("program_show", { 'slug': program.slug }) }}">en voir plus</a>
+						</article>
+					{% endif %}
 				{% endfor %}
 			</div>
 		{% else %}
 			Aucune série trouvée.
 		{% endfor %}
-    <a href="{{ path('category_index') }}">
-        Retour à la liste des catégories
-    </a>
-{% endblock %}
+		<a href="{{ path('category_index') }}">
+			Retour à la liste des catégories
+		</a>
+	{% endblock %}
