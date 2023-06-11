@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Program;
+use App\Entity\Actor;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -39,28 +40,52 @@ class ProgramRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Program[] Returns an array of Program objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findLikeName(string $name)
+    {
+        $queryBuilder = $this->createQueryBuilder('p')
+            ->where('p.title LIKE :name')
+            ->setParameter('name', '%' . $name . '%')
+            ->orderBy('p.title', 'ASC')
+            ->getQuery();
 
-//    public function findOneBySomeField($value): ?Program
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return $queryBuilder->getResult();
+    }
+
+    // public function findLikeNameOrByActor($name)
+    // {
+    //     $queryBuilder = $this->createQueryBuilder('p')
+    //     ->where('p.title LIKE :name')
+    //     ->setParameter('name', '%' . $name . '%')
+    //     ->join(Actor::class, 'a')
+    //     ->orWhere('a.name LIKE :name')
+    //     ->setParameter('name', '%' . $name . '%')
+
+    //     ->getQuery();
+    //     return $queryBuilder->getResult();
+    // }
+
+    //    /**
+    //     * @return Program[] Returns an array of Program objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('p')
+    //            ->andWhere('p.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('p.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+
+    //    public function findOneBySomeField($value): ?Program
+    //    {
+    //        return $this->createQueryBuilder('p')
+    //            ->andWhere('p.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }
