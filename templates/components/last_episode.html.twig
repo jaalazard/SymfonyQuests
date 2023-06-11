@@ -1,0 +1,16 @@
+<div{{attributes}}>
+	<div class="container-fluid">
+		<aside class="row">
+        <h1>Derniers épisodes ajoutés : </h1>
+			{% for episode in this.episodes %}
+				<div class="card col-4">
+					<div class="card-body">
+						<h4 class="card-title">
+							{{ episode.title }}</h4>
+						<h5 class="card-subtitle mb-2 text-muted">Episode n°{{ episode.number }}</h5>
+					</div>
+				</div>
+			{% endfor %}
+		</aside>
+	</div>
+</div>

@@ -1,14 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Wild Series{% endblock %}
+{% block title %}Wild Series
+{% endblock %}
 
 {% block body %}
-<div class="bg-warning container-fluid w-100">
-<h1 class="text-center">Bienvenue sur la page d'accueil du site</h1>
+	<div class="bg-warning container-fluid w-100">
+		<h1 class="text-center">Bienvenue sur la page d'accueil du site</h1>
 
-</div>
+	</div>
 
-<section class="row">
+	<section class="row">
 		{% for programs in program %}
 			<div class="card bg-danger" style="width: 18rem;">
 				<div class="card-body">
@@ -19,4 +20,6 @@
 			</div>
 		{% endfor %}
 	</section>
+
+	{{ component ('last_episode') }}
 {% endblock %}
