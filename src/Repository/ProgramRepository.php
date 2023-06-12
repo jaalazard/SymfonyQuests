@@ -51,18 +51,17 @@ class ProgramRepository extends ServiceEntityRepository
         return $queryBuilder->getResult();
     }
 
-    // public function findLikeNameOrByActor($name)
-    // {
-    //     $queryBuilder = $this->createQueryBuilder('p')
-    //     ->where('p.title LIKE :name')
-    //     ->setParameter('name', '%' . $name . '%')
-    //     ->join(Actor::class, 'a')
-    //     ->orWhere('a.name LIKE :name')
-    //     ->setParameter('name', '%' . $name . '%')
+    public function findLikeNameOrByActor($name)
+    {
+        $queryBuilder = $this->createQueryBuilder('p')
+        ->where('p.title LIKE :name')
+        ->join('p.actors', 'a')
+        ->orWhere('a.name LIKE :name')
+        ->setParameter('name', '%' . $name . '%')
 
-    //     ->getQuery();
-    //     return $queryBuilder->getResult();
-    // }
+        ->getQuery();
+        return $queryBuilder->getResult();
+    }
 
     //    /**
     //     * @return Program[] Returns an array of Program objects
