@@ -66,10 +66,14 @@ private ?DatetimeInterface $updatedAt = null;
     #[ORM\ManyToOne(inversedBy: 'programs')]
     private ?User $owner = null;
 
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'watchlist')]
+    private Collection $viewers;
+
     public function __construct()
     {
         $this->seasons = new ArrayCollection();
         $this->actors = new ArrayCollection();
+        $this->viewers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -235,6 +239,30 @@ private ?DatetimeInterface $updatedAt = null;
     public function setOwner(?User $owner): self
     {
         $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getViewers(): Collection
+    {
+        return $this->viewers;
+    }
+
+    public function addViewer(User $viewer): self
+    {
+        if (!$this->viewers->contains($viewer)) {
+            $this->viewers->add($viewer);
+        }
+
+        return $this;
+    }
+
+    public function removeViewer(User $viewer): self
+    {
+        $this->viewers->removeElement($viewer);
 
         return $this;
     }

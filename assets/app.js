@@ -1,4 +1,5 @@
 import './bootstrap.js';
+import 'bootstrap-icons/font/bootstrap-icons.css'; 
 /*
  * Welcome to your app's main JavaScript file!
  *

@@ -7,14 +7,6 @@ use App\Entity\Actor;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Program>
- *
- * @method Program|null find($id, $lockMode = null, $lockVersion = null)
- * @method Program|null findOneBy(array $criteria, array $orderBy = null)
- * @method Program[]    findAll()
- * @method Program[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class ProgramRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -51,41 +43,15 @@ class ProgramRepository extends ServiceEntityRepository
         return $queryBuilder->getResult();
     }
 
-    // public function findLikeNameOrByActor($name)
-    // {
-    //     $queryBuilder = $this->createQueryBuilder('p')
-    //     ->where('p.title LIKE :name')
-    //     ->setParameter('name', '%' . $name . '%')
-    //     ->join(Actor::class, 'a')
-    //     ->orWhere('a.name LIKE :name')
-    //     ->setParameter('name', '%' . $name . '%')
+    public function findLikeNameOrByActor($name)
+    {
+        $queryBuilder = $this->createQueryBuilder('p')
+            ->where('p.title LIKE :name')
+            ->join('p.actors', 'a')
+            ->orWhere('a.name LIKE :name')
+            ->setParameter('name', '%' . $name . '%')
 
-    //     ->getQuery();
-    //     return $queryBuilder->getResult();
-    // }
-
-    //    /**
-    //     * @return Program[] Returns an array of Program objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Program
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+            ->getQuery();
+        return $queryBuilder->getResult();
+    }
 }
