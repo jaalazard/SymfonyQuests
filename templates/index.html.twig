@@ -5,8 +5,9 @@
 
 {% block body %}
 	<div class="bg-warning container-fluid w-100">
-		<h1 class="text-center">Bienvenue sur la page d'accueil du site</h1>
-
+		<h1 class="text-center" {{ stimulus_controller('symfony/ux-typed', { strings: ['Bienvenue sur Wild-Series !',
+		 'Le meilleur site pour suivre tes séries préférées !!',
+		  'Découvre les dernières actus sur les séries du moment!!!'] } ) }}>Bienvenue sur la page d'accueil du site</h1>
 	</div>
 
 	<section class="row">

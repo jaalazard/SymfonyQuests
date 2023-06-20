@@ -265,7 +265,13 @@
             "templates/base.html.twig"
         ]
     },
+    "symfony/ux-swup": {
+        "version": "v2.9.1"
+    },
     "symfony/ux-twig-component": {
+        "version": "v2.9.1"
+    },
+    "symfony/ux-typed": {
         "version": "v2.9.1"
     },
     "symfony/validator": {
