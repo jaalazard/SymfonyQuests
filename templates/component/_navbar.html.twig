@@ -11,18 +11,15 @@
 			<li class="nav-item">
 				<a class="nav-link" href="/actor/">Acteurs</a>
 			</li>
+			{% if app.user %}
+				{{ app.user.email }}
+				<a href="{{ path('logout') }}">
+					Se déconnecter</a>
+			{% else %}
+				<a href="{{ path('login') }}">
+					Se connecter</a>
+			{% endif %}
+			<button {{ stimulus_action('theme', 'toggleDarkMode') }}>Toggle dark mode</button>
 		</ul>
-		{% if app.user %}
 
-			{{ app.user.email }}
-
-			<a href="{{ path('logout') }}">
-				Se déconnecter</a>
-
-		{% else %}
-
-			<a href="{{ path('login') }}">
-				Se connecter</a>
-
-		{% endif %}
 	</div>
